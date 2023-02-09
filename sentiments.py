@@ -30,14 +30,24 @@ def sentiment_syns_ants_forms(text,pos,neg):
     pos_syns = [syn.lower() for word in pos for syn in get_synonyms(word)]
     neg_syns = [syn.lower() for word in neg for syn in get_synonyms(word)]
 
+    #pos and negs antonyms
+    pos_ants = [ant.lower() for word in pos for ant in get_antonyms(word)]
+    neg_ants = [ant.lower() for word in neg for ant in get_antonyms(word)]
+        
+    # word forms e.g good - better best
     pos_forms = [form.lower() for word in pos for form in get_word_forms(word)]
     neg_forms = [form.lower() for word in neg for form in get_word_forms(word)]
     
     splitted = punc_free.split()
     
+    # caught keywords from pos and negs
     caught_positives, caught_negatives = [],[]
     
+    # caught synonyms and antonyms of pos and neg
     positive_synonyms,negative_synonyms = [],[]
+    positive_antonyms,negative_antonyms = [],[]
+    
+    # caught forms of pos and neg
     positive_forms,negative_forms = [],[]
     
     for word in splitted:
@@ -52,18 +62,25 @@ def sentiment_syns_ants_forms(text,pos,neg):
             positive_synonyms.append(word)
         elif word in neg_syns and word not in negative_synonyms:
             negative_synonyms.append(word)
-            
+        
+        # checking antonyms
+        elif word in pos_ants and word not in positive_antonyms:
+            positive_antonyms.append(word)
+        elif word in neg_ants and word not in negative_antonyms:
+            negative_antonyms.append(word)
+        
         #checking forms
         elif word in pos_forms and word not in positive_forms:
             positive_forms.append(word)
         elif word in neg_forms and word not in negative_forms:
             negative_forms.append(word)
-
-    all_positives = list(set(caught_positives + positive_synonyms + positive_forms))
-    all_negatives = list(set(caught_negatives + negative_synonyms + negative_forms))
+            
+    # combining all positives and all negatives together
+    all_positives = list(set(caught_positives + positive_synonyms + positive_forms + negative_antonyms))
+    all_negatives = list(set(caught_negatives + negative_synonyms + negative_forms + positive_antonyms))
     
-    return {'caught_pos': caught_positives,
-            'caught_neg': caught_negatives,
+    return {'caught_positives': caught_positives,
+            'caught_negatives': caught_negatives,
             'positive_synonyms': positive_synonyms,
             'negative_synonyms': negative_synonyms,
             'positive_forms': positive_forms,
