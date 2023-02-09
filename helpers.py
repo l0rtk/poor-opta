@@ -24,4 +24,4 @@ def get_word_forms(word):
     try:
         return words[word]
     except KeyError:
-        return []
+        return [word]
