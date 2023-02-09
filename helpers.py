@@ -7,14 +7,16 @@ def get_antonyms(word):
     for syn in wordnet.synsets(word):
         for l in syn.lemmas():
             if l.antonyms():
-                antonyms.append(l.antonyms()[0].name())
+                if l.antonyms()[0].name() not in antonyms:
+                    antonyms.append(l.antonyms()[0].name())
     return antonyms
 
 def get_synonyms(word):
     synonyms = []
     for syn in wordnet.synsets(word):
         for l in syn.lemmas():
-            synonyms.append(l.name())
+            if l.name() not in synonyms:
+                synonyms.append(l.name())
     return synonyms
 
 
